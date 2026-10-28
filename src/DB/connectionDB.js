@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
+import { DB_URI } from "../../config/config.service.js";
 
 export default async function connectionDB() {
-    await  mongoose.connect("mongodb://127.0.0.1:27017/saraha")
+    await  mongoose.connect(DB_URI)
     .then(()=>{
         console.log("DB connected successfully");
     })

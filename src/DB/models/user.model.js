@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 import { GenderEnum, ProviderEnum, RoleEnum } from "../../common/enum/user.enum.js";
 
 const userSchema=new mongoose.Schema({
-    fName:{type:String,required:true,trim:true,minLength:2,maxLenght:15},
-    lName:{type:String,required:true,trim:true,minLength:2,maxLenght:15},
+    fName:{type:String,required:true,trim:true,minLength:2,maxLength:15},
+    lName:{type:String,required:true,trim:true,minLength:2,maxLength:15},
     email:{type:String,required:true,unique:true,lowercase:true,trim:true},
     password:{type:String,required: function () {
     return this.provider == ProviderEnum.system ? true : false },trim:true},
@@ -15,12 +15,17 @@ const userSchema=new mongoose.Schema({
     coverImages:[String],
     provider:{type:String,enum:Object.values(ProviderEnum),default:ProviderEnum.system},
     role:{type:String,enum:Object.values(RoleEnum),default:RoleEnum.user},
-    isconfirmed:{type:Boolean,default:false}
+    isConfirmed:Boolean,
+    twoStepVerification:{type:Boolean,default:false},
+    changeCredentialAt:Date,
 },{
     timestamps:true ,
     strict:true ,
     strictQuery :true ,
-    toJSON:{virtuals:true},
+    toJSON:{virtuals:true,transform:(doc,ret)=>{
+        delete ret.password
+        return ret
+    }},
     toObject:{virtuals:true}
 })
 
